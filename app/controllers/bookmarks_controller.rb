@@ -7,11 +7,14 @@ class BookmarksController < ApplicationController
   end
 
   def create
+    @list = List.find(params[:list_id])
     @bookmark = Bookmark.new(bookmark_params)
     @bookmark.list = @list
+    @movie = Movie.find(params[:bookmark][:movie])
+    @bookmark.movie = @movie
 
-    if @bookmark.save
-      redirect_to list_path(@list)
+    if @bookmark.save!
+      redirect_to list_path(@bookmark.list)
     else
       render :new, status: :unprocessable_entity
     end
